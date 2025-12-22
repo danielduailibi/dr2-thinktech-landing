@@ -52,9 +52,9 @@ export default function CTASection() {
             {/* Logo */}
             <div className="flex justify-center mb-8">
               <img
-                src="/images/Gemini_Generated_Image_tp3dtmtp3dtmtp3d.png"
+                src="/images/logo-transparent.png"
                 alt="DR² ThinkTech"
-                className="h-16 w-auto"
+                className="h-20 w-auto"
               />
             </div>
 
@@ -170,20 +170,20 @@ export default function CTASection() {
             <p className="text-gray-500">
               Ou entre em contato diretamente:{" "}
               <a
-                href="mailto:contato@dr2thinktech.com"
+                href="mailto:contato@dr2think.com"
                 className="text-cyan-400 hover:text-cyan-300 transition-colors"
               >
-                contato@dr2thinktech.com
+                contato@dr2think.com
               </a>
             </p>
             <p className="text-gray-500 mt-2">
               <a
-                href="https://www.dr2thinktech.com"
+                href="https://www.dr2think.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-cyan-400 hover:text-cyan-300 transition-colors"
               >
-                www.dr2thinktech.com
+                www.dr2think.com
               </a>
             </p>
           </motion.div>

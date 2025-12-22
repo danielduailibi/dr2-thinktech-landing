@@ -3,7 +3,7 @@ import { Linkedin, Instagram, Mail } from "lucide-react";
 const socialLinks = [
   { icon: Linkedin, href: "https://linkedin.com/company/dr2thinktech", label: "LinkedIn" },
   { icon: Instagram, href: "https://instagram.com/dr2thinktech", label: "Instagram" },
-  { icon: Mail, href: "mailto:contato@dr2thinktech.com", label: "Email" },
+  { icon: Mail, href: "mailto:contato@dr2think.com", label: "Email" },
 ];
 
 const footerLinks = [
@@ -27,8 +27,8 @@ const footerLinks = [
     title: "Contato",
     links: [
       { label: "Agendar Diagnóstico", href: "#contato" },
-      { label: "contato@dr2thinktech.com", href: "mailto:contato@dr2thinktech.com" },
-      { label: "www.dr2thinktech.com", href: "https://www.dr2thinktech.com" },
+      { label: "contato@dr2think.com", href: "mailto:contato@dr2think.com" },
+      { label: "www.dr2think.com", href: "https://www.dr2think.com" },
     ],
   },
 ];
@@ -50,9 +50,9 @@ export default function Footer() {
           {/* Brand */}
           <div className="lg:col-span-2">
             <img
-              src="/images/Gemini_Generated_Image_tp3dtmtp3dtmtp3d.png"
+              src="/images/logo-transparent.png"
               alt="DR² ThinkTech"
-              className="h-12 w-auto mb-6"
+              className="h-16 w-auto mb-6"
             />
             <p className="text-gray-400 mb-6 max-w-sm leading-relaxed">
               Inteligência Estratégica para a Saúde. Da Complexidade à Clareza.
