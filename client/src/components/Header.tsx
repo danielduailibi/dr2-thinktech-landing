@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogIn, LogOut, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { getLoginUrl } from "@/const";
 
 const navLinks = [
   { href: "#problema", label: "O Problema" },
@@ -12,7 +13,17 @@ const navLinks = [
   { href: "#contato", label: "Contato" },
 ];
 
-export default function Header() {
+interface HeaderProps {
+  user?: {
+    id: number;
+    name: string | null;
+    email: string | null;
+  } | null;
+  isAuthenticated?: boolean;
+  logout?: () => Promise<void>;
+}
+
+export default function Header({ user, isAuthenticated, logout }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -30,6 +41,17 @@ export default function Header() {
       element.scrollIntoView({ behavior: "smooth" });
     }
     setIsMobileMenuOpen(false);
+  };
+
+  const handleLogin = () => {
+    window.location.href = getLoginUrl();
+  };
+
+  const handleLogout = async () => {
+    if (logout) {
+      await logout();
+      window.location.reload();
+    }
   };
 
   return (
@@ -65,8 +87,33 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* CTA Button */}
-          <div className="hidden lg:block">
+          {/* CTA Button + Auth */}
+          <div className="hidden lg:flex items-center gap-4">
+            {isAuthenticated && user ? (
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 text-gray-300">
+                  <User size={18} className="text-cyan-400" />
+                  <span className="text-sm">{user.name || user.email || "Usuário"}</span>
+                </div>
+                <Button
+                  onClick={handleLogout}
+                  variant="outline"
+                  className="border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10 hover:border-cyan-400"
+                >
+                  <LogOut size={16} className="mr-2" />
+                  Sair
+                </Button>
+              </div>
+            ) : (
+              <Button
+                onClick={handleLogin}
+                variant="outline"
+                className="border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10 hover:border-cyan-400"
+              >
+                <LogIn size={16} className="mr-2" />
+                Entrar
+              </Button>
+            )}
             <Button
               onClick={() => scrollToSection("#contato")}
               className="bg-cyan-500 hover:bg-cyan-400 text-[#0F1629] font-semibold px-6 py-2 rounded-lg transition-all duration-300 hover:shadow-[0_0_20px_rgba(34,211,238,0.4)]"
@@ -104,9 +151,37 @@ export default function Header() {
                   {link.label}
                 </button>
               ))}
+              
+              {/* Mobile Auth Buttons */}
+              {isAuthenticated && user ? (
+                <div className="flex flex-col gap-3 mt-4 pt-4 border-t border-cyan-500/10">
+                  <div className="flex items-center gap-2 text-gray-300">
+                    <User size={18} className="text-cyan-400" />
+                    <span className="text-sm">{user.name || user.email || "Usuário"}</span>
+                  </div>
+                  <Button
+                    onClick={handleLogout}
+                    variant="outline"
+                    className="border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10"
+                  >
+                    <LogOut size={16} className="mr-2" />
+                    Sair
+                  </Button>
+                </div>
+              ) : (
+                <Button
+                  onClick={handleLogin}
+                  variant="outline"
+                  className="mt-4 border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10"
+                >
+                  <LogIn size={16} className="mr-2" />
+                  Entrar
+                </Button>
+              )}
+              
               <Button
                 onClick={() => scrollToSection("#contato")}
-                className="mt-4 bg-cyan-500 hover:bg-cyan-400 text-[#0F1629] font-semibold"
+                className="mt-2 bg-cyan-500 hover:bg-cyan-400 text-[#0F1629] font-semibold"
               >
                 Agendar Diagnóstico
               </Button>

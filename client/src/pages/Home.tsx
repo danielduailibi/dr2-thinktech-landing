@@ -7,6 +7,8 @@
  * Elementos: Redes neurais animadas, glassmorphism, glow effects
  */
 
+import { useAuth } from "@/_core/hooks/useAuth";
+import { getLoginUrl } from "@/const";
 import NeuralBackground from "@/components/NeuralBackground";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
@@ -19,13 +21,17 @@ import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 
 export default function Home() {
+  // The userAuth hooks provides authentication state
+  // To implement login/logout functionality, simply call logout() or redirect to getLoginUrl()
+  const { user, loading, isAuthenticated, logout } = useAuth();
+
   return (
     <div className="min-h-screen bg-[#0F1629]">
       {/* Neural network background animation */}
       <NeuralBackground />
       
-      {/* Fixed header */}
-      <Header />
+      {/* Fixed header with auth */}
+      <Header user={user} isAuthenticated={isAuthenticated} logout={logout} />
       
       {/* Main content */}
       <main>
