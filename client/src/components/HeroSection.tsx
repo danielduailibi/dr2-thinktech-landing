@@ -1,8 +1,29 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useEffect, useRef, useState } from "react";
+
+interface Particle {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  size: number;
+  opacity: number;
+}
+
+interface Connection {
+  from: number;
+  to: number;
+  opacity: number;
+}
 
 export default function HeroSection() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const particlesRef = useRef<Particle[]>([]);
+  const animationRef = useRef<number>(0);
+
   const scrollToContact = () => {
     const element = document.querySelector("#contato");
     if (element) {
@@ -10,17 +31,152 @@ export default function HeroSection() {
     }
   };
 
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+
+    // Initialize particles
+    const particleCount = 80;
+    particlesRef.current = [];
+    
+    for (let i = 0; i < particleCount; i++) {
+      particlesRef.current.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        size: Math.random() * 3 + 1,
+        opacity: Math.random() * 0.5 + 0.3,
+      });
+    }
+
+    const animate = () => {
+      if (!ctx || !canvas) return;
+      
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const particles = particlesRef.current;
+      const mouse = mousePos;
+
+      // Update and draw particles
+      particles.forEach((particle, i) => {
+        // Mouse attraction
+        const dx = mouse.x - particle.x;
+        const dy = mouse.y - particle.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        
+        if (dist < 200) {
+          const force = (200 - dist) / 200;
+          particle.vx += (dx / dist) * force * 0.02;
+          particle.vy += (dy / dist) * force * 0.02;
+        }
+
+        // Update position
+        particle.x += particle.vx;
+        particle.y += particle.vy;
+
+        // Damping
+        particle.vx *= 0.99;
+        particle.vy *= 0.99;
+
+        // Boundary check
+        if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
+        if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+
+        // Draw particle with glow
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(34, 211, 238, ${particle.opacity})`;
+        ctx.fill();
+
+        // Add glow effect
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, particle.size * 2, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(34, 211, 238, ${particle.opacity * 0.3})`;
+        ctx.fill();
+
+        // Draw connections
+        particles.forEach((other, j) => {
+          if (i >= j) return;
+          
+          const connDx = particle.x - other.x;
+          const connDy = particle.y - other.y;
+          const connDist = Math.sqrt(connDx * connDx + connDy * connDy);
+
+          if (connDist < 150) {
+            const opacity = (1 - connDist / 150) * 0.4;
+            ctx.beginPath();
+            ctx.moveTo(particle.x, particle.y);
+            ctx.lineTo(other.x, other.y);
+            ctx.strokeStyle = `rgba(34, 211, 238, ${opacity})`;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+        });
+
+        // Draw connection to mouse if close
+        if (dist < 200) {
+          const opacity = (1 - dist / 200) * 0.6;
+          ctx.beginPath();
+          ctx.moveTo(particle.x, particle.y);
+          ctx.lineTo(mouse.x, mouse.y);
+          ctx.strokeStyle = `rgba(34, 211, 238, ${opacity})`;
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+        }
+      });
+
+      // Draw mouse glow
+      if (mouse.x > 0 && mouse.y > 0) {
+        const gradient = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 100);
+        gradient.addColorStop(0, "rgba(34, 211, 238, 0.3)");
+        gradient.addColorStop(1, "rgba(34, 211, 238, 0)");
+        ctx.beginPath();
+        ctx.arc(mouse.x, mouse.y, 100, 0, Math.PI * 2);
+        ctx.fillStyle = gradient;
+        ctx.fill();
+      }
+
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      window.removeEventListener("resize", resizeCanvas);
+      cancelAnimationFrame(animationRef.current);
+    };
+  }, [mousePos]);
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    setMousePos({ x: e.clientX, y: e.clientY });
+  };
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-      {/* Background Image */}
-      <div className="absolute inset-0 z-0">
-        <img
-          src="/images/ImagemInicial.png"
-          alt="Neural Network Background"
-          className="w-full h-full object-cover opacity-40"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0F1629]/80 via-[#0F1629]/60 to-[#0F1629]" />
-      </div>
+    <section 
+      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20"
+      onMouseMove={handleMouseMove}
+    >
+      {/* Dark gradient background */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#0A0F1C] via-[#0F1629] to-[#0F1629]" />
+      
+      {/* Neural network canvas animation */}
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 z-[1]"
+        style={{ pointerEvents: "none" }}
+      />
 
       <div className="container relative z-10 px-4 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
@@ -48,14 +204,14 @@ export default function HeroSection() {
             <span className="block text-gradient-cyan">para a Saúde</span>
           </motion.h1>
 
-          {/* Subtitle */}
+          {/* Subtitle - Updated */}
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-xl md:text-2xl text-gray-300 mb-4 font-light"
           >
-            Da Complexidade à Clareza.
+            Transformando processos em decisões inteligentes com IA.
           </motion.p>
 
           <motion.p
@@ -116,7 +272,6 @@ export default function HeroSection() {
           </motion.div>
         </div>
       </div>
-
     </section>
   );
 }
