@@ -45,7 +45,7 @@ export default function Header() {
           {/* Logo - Maior e mais visível */}
           <a href="#" className="flex items-center group">
             <img
-              src="/images/logo-transparent.png"
+              src="/images/logo-symbol.png"
               alt="DR² ThinkTech Logo"
               className="h-16 md:h-20 w-auto object-contain"
             />

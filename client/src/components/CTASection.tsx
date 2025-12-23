@@ -52,7 +52,7 @@ export default function CTASection() {
             {/* Logo */}
             <div className="flex justify-center mb-8">
               <img
-                src="/images/logo-transparent.png"
+                src="/images/logo-symbol.png"
                 alt="DR² ThinkTech"
                 className="h-20 w-auto"
               />

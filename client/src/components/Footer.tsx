@@ -50,7 +50,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="lg:col-span-2">
             <img
-              src="/images/logo-transparent.png"
+              src="/images/logo-symbol.png"
               alt="DR² ThinkTech"
               className="h-16 w-auto mb-6"
             />
