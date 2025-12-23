@@ -76,10 +76,10 @@ export default function HeroSection() {
         const dy = mouse.y - particle.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
         
-        if (dist < 200) {
-          const force = (200 - dist) / 200;
-          particle.vx += (dx / dist) * force * 0.02;
-          particle.vy += (dy / dist) * force * 0.02;
+        if (dist < 150) {
+          const force = (150 - dist) / 150;
+          particle.vx += (dx / dist) * force * 0.008;
+          particle.vy += (dy / dist) * force * 0.008;
         }
 
         // Update position
@@ -125,25 +125,25 @@ export default function HeroSection() {
           }
         });
 
-        // Draw connection to mouse if close
-        if (dist < 200) {
-          const opacity = (1 - dist / 200) * 0.6;
+        // Draw connection to mouse if close (subtle)
+        if (dist < 120) {
+          const opacity = (1 - dist / 120) * 0.25;
           ctx.beginPath();
           ctx.moveTo(particle.x, particle.y);
           ctx.lineTo(mouse.x, mouse.y);
           ctx.strokeStyle = `rgba(34, 211, 238, ${opacity})`;
-          ctx.lineWidth = 1.5;
+          ctx.lineWidth = 0.8;
           ctx.stroke();
         }
       });
 
-      // Draw mouse glow
+      // Draw mouse glow (subtle)
       if (mouse.x > 0 && mouse.y > 0) {
-        const gradient = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 100);
-        gradient.addColorStop(0, "rgba(34, 211, 238, 0.3)");
+        const gradient = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 60);
+        gradient.addColorStop(0, "rgba(34, 211, 238, 0.12)");
         gradient.addColorStop(1, "rgba(34, 211, 238, 0)");
         ctx.beginPath();
-        ctx.arc(mouse.x, mouse.y, 100, 0, Math.PI * 2);
+        ctx.arc(mouse.x, mouse.y, 60, 0, Math.PI * 2);
         ctx.fillStyle = gradient;
         ctx.fill();
       }
