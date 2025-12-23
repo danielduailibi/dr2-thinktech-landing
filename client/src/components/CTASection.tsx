@@ -65,7 +65,7 @@ export default function CTASection() {
             
             <p className="text-lg text-gray-400 max-w-2xl mx-auto">
               Agende um <span className="text-cyan-400 font-semibold">Diagnóstico Estratégico</span> para
-              mapearmos juntos as oportunidades de aplicação de inteligência em sua organização.
+              mapearmos juntos as oportunidades de aplicação da inteligência exponencial em sua organização.
             </p>
           </motion.div>
 
