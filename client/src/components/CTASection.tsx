@@ -59,8 +59,8 @@ export default function CTASection() {
             </div>
 
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
-              Vamos Construir Juntos a{" "}
-              <span className="text-gradient-cyan">Próxima Etapa?</span>
+              Que tal transformar seus processos em{" "}
+              <span className="text-gradient-cyan">decisões inteligentes utilizando IA?</span>
             </h2>
             
             <p className="text-lg text-gray-400 max-w-2xl mx-auto">
