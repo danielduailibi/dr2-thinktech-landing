@@ -60,7 +60,7 @@ export default function CTASection() {
 
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
               Que tal transformar seus processos em{" "}
-              <span className="text-gradient-cyan">decisões inteligentes utilizando IA?</span>
+              <span className="text-gradient-cyan">soluções inteligentes utilizando IA?</span>
             </h2>
             
             <p className="text-lg text-gray-400 max-w-2xl mx-auto">
