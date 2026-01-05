@@ -200,7 +200,7 @@ export default function HeroSection() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-4xl md:text-5xl lg:text-7xl font-bold text-white mb-6 leading-tight"
           >
-            <span className="block">Inteligência Estratégica</span>
+            <span className="block">Inteligência Exponencial</span>
             <span className="block text-gradient-cyan">para a Saúde</span>
           </motion.h1>
 
@@ -211,7 +211,7 @@ export default function HeroSection() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-xl md:text-2xl text-gray-300 mb-4 font-light"
           >
-            Transformando processos em decisões inteligentes com IA.
+            Transformando processos em <span className="text-cyan-400 font-medium">soluções inteligentes</span> com <span className="text-cyan-400 font-medium">IA</span>.
           </motion.p>
 
           <motion.p
@@ -220,8 +220,7 @@ export default function HeroSection() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="text-lg text-gray-400 mb-10 max-w-2xl mx-auto"
           >
-            Integramos Inteligência Artificial, ciência de dados e design de processos 
-            para apoiar decisões clínicas e organizacionais com método, ética e impacto real.
+            Integramos <span className="text-cyan-300">IA</span>, ciência de dados, design de processos e nossa expertise clínica e de gestão para apoiar decisões e automatizar processos organizacionais com método, ética e impacto real.
           </motion.p>
 
           {/* CTA Buttons */}
