@@ -14,7 +14,8 @@ export default function IntroVideo({ onVideoEnd }: IntroVideoProps) {
   const [isVisible, setIsVisible] = useState(true);
   const [canSkip, setCanSkip] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [isMuted, setIsMuted] = useState(false); // Áudio habilitado por padrão
+  const [isMuted, setIsMuted] = useState(true); // Começar mudo para garantir autoplay
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     // Permitir pular após 3 segundos
@@ -22,34 +23,46 @@ export default function IntroVideo({ onVideoEnd }: IntroVideoProps) {
       setCanSkip(true);
     }, 3000);
 
-    // Tentar reproduzir o vídeo automaticamente
-    const playVideo = async () => {
-      if (videoRef.current) {
-        try {
-          await videoRef.current.play();
-        } catch (error) {
-          // Se autoplay falhar, tentar com mudo
-          if (videoRef.current) {
-            videoRef.current.muted = true;
-            setIsMuted(true);
-            try {
-              await videoRef.current.play();
-            } catch (e) {
-              console.log("Autoplay bloqueado pelo navegador");
-            }
-          }
-        }
+    return () => clearTimeout(skipTimer);
+  }, []);
+
+  // Tentar reproduzir o vídeo quando o componente montar
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const attemptPlay = async () => {
+      try {
+        // Primeiro tenta com mudo (mais provável de funcionar)
+        video.muted = true;
+        setIsMuted(true);
+        await video.play();
+        setIsLoading(false);
+      } catch (error) {
+        console.log("Autoplay falhou:", error);
+        setHasError(true);
+        // Se falhar completamente, pular para a landing page
+        setTimeout(() => {
+          handleVideoEnd();
+        }, 1000);
       }
     };
 
-    playVideo();
+    // Aguardar o vídeo estar pronto
+    if (video.readyState >= 3) {
+      attemptPlay();
+    } else {
+      video.addEventListener('canplay', attemptPlay, { once: true });
+    }
 
-    return () => clearTimeout(skipTimer);
+    return () => {
+      video.removeEventListener('canplay', attemptPlay);
+    };
   }, []);
 
   const handleVideoEnd = () => {
     setIsVisible(false);
-    setTimeout(onVideoEnd, 500); // Aguarda a animação de fade out
+    setTimeout(onVideoEnd, 300);
   };
 
   const handleSkip = () => {
@@ -60,10 +73,20 @@ export default function IntroVideo({ onVideoEnd }: IntroVideoProps) {
     setIsLoading(false);
   };
 
+  const handleError = () => {
+    console.log("Erro ao carregar vídeo");
+    setHasError(true);
+    // Se houver erro, pular para a landing page após 2 segundos
+    setTimeout(() => {
+      handleVideoEnd();
+    }, 2000);
+  };
+
   const toggleMute = () => {
     if (videoRef.current) {
-      videoRef.current.muted = !videoRef.current.muted;
-      setIsMuted(!isMuted);
+      const newMutedState = !videoRef.current.muted;
+      videoRef.current.muted = newMutedState;
+      setIsMuted(newMutedState);
     }
   };
 
@@ -73,13 +96,23 @@ export default function IntroVideo({ onVideoEnd }: IntroVideoProps) {
         <motion.div
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.3 }}
           className="fixed inset-0 z-[100] bg-black flex items-center justify-center"
         >
           {/* Loading spinner */}
-          {isLoading && (
+          {isLoading && !hasError && (
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="w-10 h-10 border-2 border-cyan-400/30 border-t-cyan-400 rounded-full animate-spin" />
+            </div>
+          )}
+
+          {/* Error message */}
+          {hasError && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="text-center">
+                <div className="w-10 h-10 border-2 border-cyan-400/30 border-t-cyan-400 rounded-full animate-spin mx-auto mb-4" />
+                <p className="text-white/60 text-sm">Carregando...</p>
+              </div>
             </div>
           )}
 
@@ -89,11 +122,14 @@ export default function IntroVideo({ onVideoEnd }: IntroVideoProps) {
             autoPlay
             muted={isMuted}
             playsInline
+            preload="auto"
             onEnded={handleVideoEnd}
             onCanPlay={handleCanPlay}
+            onError={handleError}
             className={`w-full h-full object-contain transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
           >
             <source src={VIDEO_URL} type="video/mp4" />
+            Seu navegador não suporta vídeos HTML5.
           </video>
 
           {/* Logo DR² ThinkTech - canto inferior esquerdo */}
