@@ -5,10 +5,14 @@ interface IntroVideoProps {
   onVideoEnd: () => void;
 }
 
+// URL do vídeo no CDN
+const VIDEO_URL = "https://files.manuscdn.com/user_upload_by_module/session_file/310419663029732852/DQpYREiUaWfIECvi.mp4";
+
 export default function IntroVideo({ onVideoEnd }: IntroVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isVisible, setIsVisible] = useState(true);
   const [canSkip, setCanSkip] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // Permitir pular após 3 segundos
@@ -30,6 +34,10 @@ export default function IntroVideo({ onVideoEnd }: IntroVideoProps) {
     }
   };
 
+  const handleCanPlay = () => {
+    setIsLoading(false);
+  };
+
   return (
     <AnimatePresence>
       {isVisible && (
@@ -39,6 +47,13 @@ export default function IntroVideo({ onVideoEnd }: IntroVideoProps) {
           transition={{ duration: 0.5 }}
           className="fixed inset-0 z-[100] bg-[#0F1629] flex items-center justify-center"
         >
+          {/* Loading spinner */}
+          {isLoading && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-12 h-12 border-4 border-cyan-400/30 border-t-cyan-400 rounded-full animate-spin" />
+            </div>
+          )}
+
           {/* Video */}
           <video
             ref={videoRef}
@@ -46,9 +61,10 @@ export default function IntroVideo({ onVideoEnd }: IntroVideoProps) {
             muted
             playsInline
             onEnded={handleVideoEnd}
-            className="w-full h-full object-contain"
+            onCanPlay={handleCanPlay}
+            className={`w-full h-full object-contain transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
           >
-            <source src="/videos/intro-video.mp4" type="video/mp4" />
+            <source src={VIDEO_URL} type="video/mp4" />
           </video>
 
           {/* Skip button */}
