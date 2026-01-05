@@ -22,6 +22,28 @@ export default function IntroVideo({ onVideoEnd }: IntroVideoProps) {
       setCanSkip(true);
     }, 3000);
 
+    // Tentar reproduzir o vídeo automaticamente
+    const playVideo = async () => {
+      if (videoRef.current) {
+        try {
+          await videoRef.current.play();
+        } catch (error) {
+          // Se autoplay falhar, tentar com mudo
+          if (videoRef.current) {
+            videoRef.current.muted = true;
+            setIsMuted(true);
+            try {
+              await videoRef.current.play();
+            } catch (e) {
+              console.log("Autoplay bloqueado pelo navegador");
+            }
+          }
+        }
+      }
+    };
+
+    playVideo();
+
     return () => clearTimeout(skipTimer);
   }, []);
 
@@ -31,9 +53,7 @@ export default function IntroVideo({ onVideoEnd }: IntroVideoProps) {
   };
 
   const handleSkip = () => {
-    if (canSkip) {
-      handleVideoEnd();
-    }
+    handleVideoEnd();
   };
 
   const handleCanPlay = () => {
@@ -76,44 +96,44 @@ export default function IntroVideo({ onVideoEnd }: IntroVideoProps) {
             <source src={VIDEO_URL} type="video/mp4" />
           </video>
 
-          {/* Controles discretos no canto inferior */}
-          <div className="absolute bottom-6 left-0 right-0 px-6 flex items-center justify-between">
-            {/* Logo DR² ThinkTech - esquerda */}
-            <div className="flex items-center gap-1.5 text-white/40 text-xs">
-              <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse" />
-              <span className="font-medium tracking-wide">DR² ThinkTech</span>
-            </div>
-
-            {/* Botões de controle - direita */}
-            <div className="flex items-center gap-3">
-              {/* Botão de som - pequeno e discreto */}
-              <motion.button
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
-                onClick={toggleMute}
-                className="p-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white/60 hover:text-white/90 transition-all duration-200"
-                title={isMuted ? "Ativar som" : "Desativar som"}
-              >
-                {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
-              </motion.button>
-
-              {/* Botão de pular - aparece após 3s */}
-              <AnimatePresence>
-                {canSkip && (
-                  <motion.button
-                    initial={{ opacity: 0, x: 10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0 }}
-                    onClick={handleSkip}
-                    className="px-3 py-1.5 text-xs font-medium text-white/70 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 rounded-full transition-all duration-200"
-                  >
-                    Pular →
-                  </motion.button>
-                )}
-              </AnimatePresence>
-            </div>
+          {/* Logo DR² ThinkTech - canto inferior esquerdo */}
+          <div className="absolute bottom-6 left-6 flex items-center gap-1.5 text-white/40 text-xs">
+            <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse" />
+            <span className="font-medium tracking-wide">DR² ThinkTech</span>
           </div>
+
+          {/* Botão de som - canto inferior esquerdo, ao lado do logo */}
+          <motion.button
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            onClick={toggleMute}
+            className="absolute bottom-6 left-32 p-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white/60 hover:text-white/90 transition-all duration-200"
+            title={isMuted ? "Ativar som" : "Desativar som"}
+          >
+            {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
+          </motion.button>
+
+          {/* Botão de pular - GRANDE, canto inferior direito, cobrindo o logo Veo */}
+          <motion.button
+            initial={{ opacity: 0 }}
+            animate={{ opacity: canSkip ? 1 : 0.3 }}
+            onClick={handleSkip}
+            disabled={!canSkip}
+            className="absolute bottom-4 right-4 px-6 py-3 text-sm font-semibold text-white bg-[#0F1629]/90 hover:bg-[#0F1629] border border-cyan-500/30 hover:border-cyan-400 rounded-lg transition-all duration-200 shadow-lg backdrop-blur-sm min-w-[140px]"
+            style={{ zIndex: 10 }}
+          >
+            {canSkip ? (
+              <span className="flex items-center justify-center gap-2">
+                Pular Vídeo
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                </svg>
+              </span>
+            ) : (
+              <span className="text-white/50">Aguarde...</span>
+            )}
+          </motion.button>
         </motion.div>
       )}
     </AnimatePresence>
