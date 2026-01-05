@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Volume2, VolumeX } from "lucide-react";
 
 interface IntroVideoProps {
   onVideoEnd: () => void;
@@ -13,6 +14,7 @@ export default function IntroVideo({ onVideoEnd }: IntroVideoProps) {
   const [isVisible, setIsVisible] = useState(true);
   const [canSkip, setCanSkip] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isMuted, setIsMuted] = useState(true);
 
   useEffect(() => {
     // Permitir pular após 3 segundos
@@ -38,6 +40,13 @@ export default function IntroVideo({ onVideoEnd }: IntroVideoProps) {
     setIsLoading(false);
   };
 
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted;
+      setIsMuted(!isMuted);
+    }
+  };
+
   return (
     <AnimatePresence>
       {isVisible && (
@@ -58,7 +67,7 @@ export default function IntroVideo({ onVideoEnd }: IntroVideoProps) {
           <video
             ref={videoRef}
             autoPlay
-            muted
+            muted={isMuted}
             playsInline
             onEnded={handleVideoEnd}
             onCanPlay={handleCanPlay}
@@ -66,6 +75,28 @@ export default function IntroVideo({ onVideoEnd }: IntroVideoProps) {
           >
             <source src={VIDEO_URL} type="video/mp4" />
           </video>
+
+          {/* Sound control button */}
+          <motion.button
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            onClick={toggleMute}
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 px-5 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white text-sm font-medium hover:bg-white/20 transition-all duration-300 flex items-center gap-2"
+            title={isMuted ? "Ativar som" : "Desativar som"}
+          >
+            {isMuted ? (
+              <>
+                <VolumeX size={18} />
+                <span>Ativar Som</span>
+              </>
+            ) : (
+              <>
+                <Volume2 size={18} />
+                <span>Som Ativado</span>
+              </>
+            )}
+          </motion.button>
 
           {/* Skip button */}
           <AnimatePresence>
