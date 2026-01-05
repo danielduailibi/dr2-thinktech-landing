@@ -5,12 +5,15 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
+import Intro from "./pages/Intro";
 
 function Router() {
-  // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
-      <Route path={"/"} component={Home} />
+      {/* Página de introdução com vídeo */}
+      <Route path={"/"} component={Intro} />
+      {/* Landing page principal */}
+      <Route path={"/home"} component={Home} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>
