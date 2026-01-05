@@ -14,7 +14,7 @@ export default function IntroVideo({ onVideoEnd }: IntroVideoProps) {
   const [isVisible, setIsVisible] = useState(true);
   const [canSkip, setCanSkip] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [isMuted, setIsMuted] = useState(true);
+  const [isMuted, setIsMuted] = useState(false); // Áudio habilitado por padrão
 
   useEffect(() => {
     // Permitir pular após 3 segundos
@@ -54,12 +54,12 @@ export default function IntroVideo({ onVideoEnd }: IntroVideoProps) {
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
-          className="fixed inset-0 z-[100] bg-[#0F1629] flex items-center justify-center"
+          className="fixed inset-0 z-[100] bg-black flex items-center justify-center"
         >
           {/* Loading spinner */}
           {isLoading && (
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-12 h-12 border-4 border-cyan-400/30 border-t-cyan-400 rounded-full animate-spin" />
+              <div className="w-10 h-10 border-2 border-cyan-400/30 border-t-cyan-400 rounded-full animate-spin" />
             </div>
           )}
 
@@ -76,47 +76,43 @@ export default function IntroVideo({ onVideoEnd }: IntroVideoProps) {
             <source src={VIDEO_URL} type="video/mp4" />
           </video>
 
-          {/* Sound control button */}
-          <motion.button
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            onClick={toggleMute}
-            className="absolute bottom-8 left-1/2 -translate-x-1/2 px-5 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white text-sm font-medium hover:bg-white/20 transition-all duration-300 flex items-center gap-2"
-            title={isMuted ? "Ativar som" : "Desativar som"}
-          >
-            {isMuted ? (
-              <>
-                <VolumeX size={18} />
-                <span>Ativar Som</span>
-              </>
-            ) : (
-              <>
-                <Volume2 size={18} />
-                <span>Som Ativado</span>
-              </>
-            )}
-          </motion.button>
+          {/* Controles discretos no canto inferior */}
+          <div className="absolute bottom-6 left-0 right-0 px-6 flex items-center justify-between">
+            {/* Logo DR² ThinkTech - esquerda */}
+            <div className="flex items-center gap-1.5 text-white/40 text-xs">
+              <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse" />
+              <span className="font-medium tracking-wide">DR² ThinkTech</span>
+            </div>
 
-          {/* Skip button */}
-          <AnimatePresence>
-            {canSkip && (
+            {/* Botões de controle - direita */}
+            <div className="flex items-center gap-3">
+              {/* Botão de som - pequeno e discreto */}
               <motion.button
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                onClick={handleSkip}
-                className="absolute bottom-8 right-8 px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white text-sm font-medium hover:bg-white/20 transition-all duration-300"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+                onClick={toggleMute}
+                className="p-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white/60 hover:text-white/90 transition-all duration-200"
+                title={isMuted ? "Ativar som" : "Desativar som"}
               >
-                Pular Intro →
+                {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
               </motion.button>
-            )}
-          </AnimatePresence>
 
-          {/* Loading indicator while video loads */}
-          <div className="absolute bottom-8 left-8 flex items-center gap-2 text-white/50 text-sm">
-            <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse" />
-            DR² ThinkTech
+              {/* Botão de pular - aparece após 3s */}
+              <AnimatePresence>
+                {canSkip && (
+                  <motion.button
+                    initial={{ opacity: 0, x: 10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0 }}
+                    onClick={handleSkip}
+                    className="px-3 py-1.5 text-xs font-medium text-white/70 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 rounded-full transition-all duration-200"
+                  >
+                    Pular →
+                  </motion.button>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
         </motion.div>
       )}
