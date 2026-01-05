@@ -87,8 +87,8 @@ export default function Header({ user, isAuthenticated, logout }: HeaderProps) {
             ))}
           </nav>
 
-          {/* CTA Button + Auth */}
-          <div className="hidden lg:flex items-center gap-4">
+          {/* Login Button - Lado direito */}
+          <div className="hidden lg:flex items-center">
             {isAuthenticated && user ? (
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-2 text-gray-300">
@@ -107,19 +107,12 @@ export default function Header({ user, isAuthenticated, logout }: HeaderProps) {
             ) : (
               <Button
                 onClick={handleLogin}
-                variant="outline"
-                className="border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10 hover:border-cyan-400"
+                className="bg-cyan-500 hover:bg-cyan-400 text-[#0F1629] font-semibold px-6 py-2 rounded-lg transition-all duration-300 hover:shadow-[0_0_20px_rgba(34,211,238,0.4)]"
               >
                 <LogIn size={16} className="mr-2" />
-                Entrar
+                Login
               </Button>
             )}
-            <Button
-              onClick={() => scrollToSection("#contato")}
-              className="bg-cyan-500 hover:bg-cyan-400 text-[#0F1629] font-semibold px-6 py-2 rounded-lg transition-all duration-300 hover:shadow-[0_0_20px_rgba(34,211,238,0.4)]"
-            >
-              Agendar Diagnóstico
-            </Button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -171,20 +164,12 @@ export default function Header({ user, isAuthenticated, logout }: HeaderProps) {
               ) : (
                 <Button
                   onClick={handleLogin}
-                  variant="outline"
-                  className="mt-4 border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10"
+                  className="mt-4 bg-cyan-500 hover:bg-cyan-400 text-[#0F1629] font-semibold"
                 >
                   <LogIn size={16} className="mr-2" />
-                  Entrar
+                  Login
                 </Button>
               )}
-              
-              <Button
-                onClick={() => scrollToSection("#contato")}
-                className="mt-2 bg-cyan-500 hover:bg-cyan-400 text-[#0F1629] font-semibold"
-              >
-                Agendar Diagnóstico
-              </Button>
             </nav>
           </motion.div>
         )}
