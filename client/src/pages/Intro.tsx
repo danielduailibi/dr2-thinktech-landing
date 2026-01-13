@@ -4,7 +4,7 @@ import { Volume2, VolumeX, Play } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 // URL do vídeo no CDN
-const VIDEO_URL = "https://files.manuscdn.com/user_upload_by_module/session_file/310419663029732852/DQpYREiUaWfIECvi.mp4";
+const VIDEO_URL = "https://files.manuscdn.com/user_upload_by_module/session_file/310419663029732852/rPlVjHDfjCDnXiHd.mp4";
 
 export default function Intro() {
   const [, setLocation] = useLocation();
