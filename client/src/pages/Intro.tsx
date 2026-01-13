@@ -59,8 +59,9 @@ export default function Intro() {
 
     const attemptPlay = async () => {
       try {
-        video.muted = true;
-        setIsMuted(true);
+        // Primeiro tenta com som
+        video.muted = false;
+        setIsMuted(false);
         await video.play();
         setLoadingProgress(100);
         
@@ -71,13 +72,28 @@ export default function Intro() {
           setIsPlaying(true);
         }, 500);
       } catch (error) {
-        console.log("Autoplay bloqueado, mostrando botão de play");
-        setLoadingProgress(100);
-        setTimeout(() => {
-          setIsLoading(false);
-          setShowContent(true);
-          setShowPlayButton(true);
-        }, 500);
+        // Se falhar com som, tenta mudo e mostra botão para ativar som
+        console.log("Autoplay com som bloqueado, tentando mudo...");
+        try {
+          video.muted = true;
+          setIsMuted(true);
+          await video.play();
+          setLoadingProgress(100);
+          
+          setTimeout(() => {
+            setIsLoading(false);
+            setShowContent(true);
+            setIsPlaying(true);
+          }, 500);
+        } catch (mutedError) {
+          console.log("Autoplay bloqueado, mostrando botão de play");
+          setLoadingProgress(100);
+          setTimeout(() => {
+            setIsLoading(false);
+            setShowContent(true);
+            setShowPlayButton(true);
+          }, 500);
+        }
       }
     };
 
@@ -119,8 +135,9 @@ export default function Intro() {
     if (!video) return;
 
     try {
-      video.muted = true;
-      setIsMuted(true);
+      // Quando o usuário clica, podemos reproduzir com som
+      video.muted = false;
+      setIsMuted(false);
       await video.play();
       setIsPlaying(true);
       setShowPlayButton(false);
