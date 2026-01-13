@@ -67,17 +67,8 @@ export default function DifferentialsSection() {
           transition={{ duration: 0.6 }}
           className="mb-20"
         >
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left - Image */}
-            <div className="relative">
-              <img
-                src="/images/unnamed(1).png"
-                alt="DR² ThinkTech - Inteligência Médica"
-                className="w-full h-auto rounded-2xl shadow-2xl"
-              />
-            </div>
-
-            {/* Right - Content */}
+          <div className="max-w-3xl mx-auto text-center">
+            {/* Content */}
             <div>
               <h2 className="text-3xl md:text-4xl font-bold text-[#1E3A5F] mb-6">
                 Inteligência Artificial Aplicada com{" "}
@@ -85,10 +76,10 @@ export default function DifferentialsSection() {
               </h2>
               
               <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                Nossa IA respeita a fisiologia, a evidência científica e o contexto
-                assistencial. Atuamos como um instrumento que amplifica a capacidade
-                humana, garantindo que a tecnologia apoie pessoas e decisões, não as
-                substitua.
+                Nossa IA respeita a fisiologia, a evidência científica, o tratamento sigiloso
+                de dados e o contexto institucional. Atuamos como um instrumento que amplifica
+                a capacidade humana e organizacional, garantindo que a tecnologia apoie pessoas
+                e decisões.
               </p>
 
               <div className="grid sm:grid-cols-3 gap-6">

@@ -8,13 +8,13 @@ const problems = [
     icon: Database,
     title: "Excesso de Dados, Falta de Clareza",
     description:
-      "Decisões críticas são tomadas em um oceano de informações desestruturadas, comprometendo a qualidade do cuidado.",
+      "Decisões críticas são tomadas em um oceano de informações desestruturadas, comprometendo a eficiência da gestão e do cuidado.",
   },
   {
     icon: TrendingUp,
     title: "Pressão por Eficiência e Qualidade",
     description:
-      "A necessidade de otimizar desfechos e recursos nunca foi tão alta. Hospitais precisam fazer mais com menos.",
+      "A necessidade de otimizar desfechos e recursos nunca foi tão alta. Hospitais e empresas de gestão de equipes médicas precisam fazer mais com menos.",
   },
   {
     icon: AlertTriangle,
@@ -54,8 +54,8 @@ export default function ProblemSection() {
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             A saúde moderna opera em um cenário de alta complexidade, com processos
-            fragmentados, variabilidade clínica, pressão por eficiência, sobrecarga dos
-            setores de qualidade e risco assistencial crescente.
+            fragmentados, variabilidade, vulnerabilidade e pressão por eficiência. A sobrecarga
+            dos setores de qualidade e riscos assistenciais e jurídicos são crescentes.
           </p>
         </motion.div>
 

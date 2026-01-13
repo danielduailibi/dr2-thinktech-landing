@@ -64,9 +64,9 @@ export default function AboutSection() {
             </h2>
 
             <p className="text-lg text-gray-300 mb-8 leading-relaxed">
-              A DR² ThinkTech nasce para integrar o rigor do raciocínio clínico com o
-              poder da tecnologia. Não vendemos IA, construímos clareza em cenários
-              complexos. Porque em saúde, cada decisão importa.
+              A DR² ThinkTech nasce para integrar o rigor do raciocínio clínico e a nossa
+              expertize em gestão com o poder da tecnologia. Não vendemos IA ou produtos de
+              prateleira, nós construímos clareza e automação em cenários complexos.
             </p>
 
             <div className="space-y-6">
@@ -79,7 +79,7 @@ export default function AboutSection() {
                   <h4 className="text-white font-semibold mb-1">Pensamento Médico</h4>
                   <p className="text-gray-400 text-sm">
                     Representa o pensamento médico estruturado, a vivência clínica e a
-                    responsabilidade profissional.
+                    responsabilidade profissional dos sócios da empresa.
                   </p>
                 </div>
               </div>

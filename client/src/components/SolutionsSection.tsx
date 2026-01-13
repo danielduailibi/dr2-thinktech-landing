@@ -73,7 +73,7 @@ export default function SolutionsSection() {
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             Integramos Inteligência Artificial, ciência de dados e design de processos
-            para apoiar decisões clínicas e organizacionais.
+            para apoiar e automatizar processos e gargalos organizacionais e operacionais.
           </p>
         </motion.div>
 
